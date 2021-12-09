@@ -15,12 +15,19 @@ function findPokemonByName(name) {
     return PokemonModel.find({name: name}).exec();
 }
 
+function findPokemonByOwner(owner) {
+    return PokemonModel.find({
+        owner: owner
+    }).exec();
+}
+
 function findPokemonById(id) {
     return PokemonModel.findById(id).exec();
 }
 
 // Make sure to export a function after you create it!
 module.exports = {
+    findPokemonByOwner,
     insertPokemon,
     findPokemonByName,
     getAllPokemon,

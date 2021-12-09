@@ -23,7 +23,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "devstart": "concurrently \"nodemon ./server.js\" \"react-scripts start\"",
+    "devstart": "concurrently \"react-scripts start\" \"nodemon ./server.js\" ",
+    "devreact": "react-scripts start",
     "start": "node ./server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",

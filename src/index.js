@@ -7,13 +7,17 @@ import PokemonList from './PokemonList';
 import PokemonSearch from './PokemonSearch';
 import reportWebVitals from './reportWebVitals';
 import Register from './Register';
+import PokemonTracker from './PokemonTracker';
+import Logout from './Logout';
 
 
 
 ReactDOM.render(
   <Router>
+    <Logout />
     <Routes>
       <Route path="/" element={<Register />} />
+      <Route path="/myPokemon" element={<PokemonTracker />} />
       <Route path="/list" element={<PokemonList />} />
       <Route path="/pokemonSearch/:searchQuery" element={<PokemonSearch />} />
       <Route path="/pokemon/:pokemonName" element={<PokemonDetails />} />

@@ -1,4 +1,5 @@
 const express = require('express');
+const auth_middleware = require('./auth_middleware');
 const router = express.Router();
 const PokemonAccessor = require('./models/Pokemon.Model');
 
@@ -25,6 +26,13 @@ router.get('/findAll', function(request, response) {
     .catch(error => response.status(400).send(error))
 })
 
+router.get('/myPokemon', auth_middleware, function(request, response) {
+  return PokemonAccessor.findPokemonByOwner(request.username)
+  .then(pokemonResponse => response.status(200).send(pokemonResponse))
+  .catch(error => response.status(400).send(error))
+  
+})
+
 // router.get('/find/:pokemonName', function(req, res) {
   
 //   // const pokemonQuery = req.query.q;
@@ -46,27 +54,29 @@ router.get('/findAll', function(request, response) {
   
 // });
 
-router.post('/create', (request, response) => {
-  const {name, health} = request.body;
-  if(!name || !health) {
+router.post('/create', auth_middleware, (request, response) => {
+  const pokemon = request.body;
+  if(!pokemon.name || !pokemon.health || !pokemon.type) {
     return response.status(422).send("Missing data");
   }
-  
-  return PokemonAccessor.findPokemonByName(name)
-    .then((pokemonResponse) => {
-      if(pokemonResponse.length) {
-        response.status(402).send("Pokemon with that name already exists")
-      } else {
-        PokemonAccessor.insertPokemon(request.body)
-          .then(pokemonResponse => response.status(200).send(pokemonResponse))
-          .catch(error => response.status(400).send(error))
-        
-      }
 
-    }
+  pokemon.owner = request.username;
+  
+  PokemonAccessor.insertPokemon(request.body)
+    .then(pokemonResponse => response.status(200).send(pokemonResponse))
+    .catch(error => response.status(400).send(error))
+
+  // return PokemonAccessor.findPokemonByName(name)
+  //   .then((pokemonResponse) => {
+  //     if(pokemonResponse.length) {
+  //       response.status(402).send("Pokemon with that name already exists")
+  //     } else {
+        
+    //   }
+
+    // }
       
     
-    )
 
   // pokemons.push({
   //   name: name,

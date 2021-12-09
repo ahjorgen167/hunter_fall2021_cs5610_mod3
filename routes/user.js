@@ -21,8 +21,8 @@ router.get('/whoIsLoggedIn', auth_middleware, function(request, response) {
 
 })
 
-router.get('/whoIsAlsoLoggedIn', function(request, response) {
-    const username = request.username;
+router.get('/whoIsLoggedInButWithoutMiddleware', function(request, response) {
+    const username = request.session.username;
 
     return response.send(username);
 
@@ -129,17 +129,26 @@ router.post('/', function(req, res) {
     const { username, password } = req.body;
     // const username = req.body.username
     // const password = req.body.password
+    console.log(req.body);
+
     if (!username || !password) {
         return res.status(422).send("Missing username: " + username + "or password:" + password)
     }
 
-    return UserModel.insertUser({username, password})
+    return UserModel.insertUser({username: username, password: password})
         .then((userResponse) => {
-                return res.status(200).send(userResponse);
+            req.session.username = username;
 
+            //return response.cookie('huntersCookie', token, {httpOnly: true})
+            return res.status(200).send({username});
         })
-        .catch(error => res.status(400).send(error))
+        .catch(error => res.status(422).send(error))
 
 });
+
+router.post('/logout', function(req, res) {
+    req.session.destroy()
+    return res.send("Ok");
+})
 
 module.exports = router;

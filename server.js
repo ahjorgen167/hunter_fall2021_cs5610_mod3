@@ -28,7 +28,6 @@ app.use(cors());
 
 app.use(cookieParser());
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -46,12 +45,11 @@ app.get('/banana', (req, res) => {
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('*', function (req, res) {
-    console.log("received request");
     res.sendFile(path.join(__dirname, "build", "index.html"));
     // res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
   
 
-app.listen(8000, function() {
+app.listen(process.env.PORT || 8000, () => {
     console.log('Starting server');
 });

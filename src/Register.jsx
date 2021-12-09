@@ -1,14 +1,18 @@
 import axios from 'axios';
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router';
 
 
 export default (props) => {
+
+    const navigate = useNavigate();
 
     const [userData, setUserData] = useState({
         password: '',
         username: '',
     })
 
+    const [loggedInName, setLoggedInName] = useState('');
 
     return (
         <div>
@@ -32,10 +36,23 @@ export default (props) => {
             <button
                 onClick={() => {
                     axios.post('/api/users', userData)
-                        .then(response => console.log(response))
+                        .then(response => {
+                            navigate("/myPokemon")
+                            console.log(response)
+                        })
                         .catch(error => console.log(error));
                 }}
             >Register New User</button>
+            <button
+                onClick={
+                    () => {
+                        axios.get('/api/users/whoIsLoggedIn')
+                            .then(response => setLoggedInName(response.data))
+                            .catch(error => console.log(error));
+                    }
+                }
+                >Who is logged in?</button>
+            {loggedInName && <div>{loggedInName}</div>}
         </div>
     );
 

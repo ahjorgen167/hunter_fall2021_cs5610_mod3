@@ -17,8 +17,7 @@ function App() {
       return;
     }
 
-
-    axios.get('http://localhost:8000/api/pokemon/find/' + formInput)
+    axios.get('/api/pokemon/find/' + formInput)
       .then(response => setPokemon(response.data))
       .catch(error => setPokemon({
         name: "No pokemon found",

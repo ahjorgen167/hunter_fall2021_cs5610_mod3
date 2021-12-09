@@ -7,7 +7,7 @@ export default function PokemonSearchBar() {
 
 
     function findAllPokemon() {
-        axios.get('http://localhost:8000/api/pokemon/findAll')
+        axios.get('api/pokemon/findAll')
             .then(response => {
                 setAllPokemon(response.data)
             })
